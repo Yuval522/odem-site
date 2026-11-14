@@ -13,4 +13,4 @@ Marketing site for **odem Kitchens (מטבחי אודם)**, a custom kitchen and
 node build.mjs        # writes dist/
 ```
 
-Deploy: upload the contents of `dist/` (or a zip of it) to Cloudflare Pages → odem-kitchens → Create deployment.
+Deploy: every push to `main` is built and published automatically by Cloudflare Pages (build command `node build.mjs`, output directory `dist`).
