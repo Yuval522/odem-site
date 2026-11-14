@@ -39,13 +39,14 @@ const BUSINESS = {
   logo: `${SITE}/icons/oj-icon-512.png`,
   image: [`${SITE}/assets/1111.jpeg`, `${SITE}/assets/new/kitchen-white-walnut-island.jpg`],
   telephone: "+972-50-740-0143",
+  email: "info@odemdesign.co.il",
   address: { "@type": "PostalAddress", addressLocality: "מושב גבעולים", addressRegion: "מחוז הדרום", addressCountry: "IL" },
   areaServed: { "@type": "Country", name: "Israel" },
   foundingDate: "2021",
   knowsLanguage: ["he", "en"],
   knowsAbout: ["מטבחים בהתאמה אישית", "ארונות קיר", "חדרי ארונות", "ויטרינות", "קירות יין", "נגרות מוסדית", "חיתוך CNC", "פרזול Blum"],
   contactPoint: [
-    { "@type": "ContactPoint", telephone: "+972-50-740-0143", contactType: "customer service", availableLanguage: ["Hebrew", "English"] },
+    { "@type": "ContactPoint", telephone: "+972-50-740-0143", email: "info@odemdesign.co.il", contactType: "customer service", availableLanguage: ["Hebrew", "English"] },
   ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
@@ -139,6 +140,7 @@ function footer() {
             <ul class="footer-nav">
                 ${NAV.slice(1).map(([h, l]) => `<li><a href="${h}">${l}</a></li>`).join("\n                ")}
             </ul>
+            <p class="footer-contact"><a href="tel:0507400143" dir="ltr">050-7400143</a> · <a href="mailto:info@odemdesign.co.il" dir="ltr">info@odemdesign.co.il</a></p>
             <ul class="footer-legal">
                 <li><a href="/privacy/">מדיניות פרטיות</a></li>
                 <li><a href="/terms/">תנאי שימוש</a></li>
@@ -291,6 +293,7 @@ const columns = (title, cols, extraClass = "") => `
 const ICON = {
   phone: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 3.5h3.2l1.6 4.2-2 1.3a11 11 0 0 0 7.2 7.2l1.3-2 4.2 1.6V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.1 1.5 1.5 0 0 1 5 3.5z"/></svg>',
   wa: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 8.6c.2-.5.5-.6.8-.6h.5c.2 0 .4.1.5.4l.7 1.7c.1.2 0 .5-.1.6l-.5.6c.6 1.2 1.6 2.2 2.8 2.8l.6-.5c.2-.2.4-.2.6-.1l1.7.7c.3.1.4.3.4.5v.5c0 .4-.2.7-.6.9-.9.4-2.2.3-4-.8a9 9 0 0 1-2.8-2.8c-1.1-1.8-1.2-3.1-.9-3.9z"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>',
   pin: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
 };
 
@@ -303,7 +306,7 @@ function contactList() {
                         <a class="cx-value" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ""}>${value}</a>
                     </li>`;
   return `
-                <ul class="cx-list">${row(ICON.wa, "וואטסאפ", "שלחו לנו הודעה", WA, true)}${row(ICON.phone, "טלפון", '<span dir="ltr">050-7400143</span>', "tel:+972507400143")}${row(ICON.pin, "המפעל", "מושב גבעולים, ליד נתיבות", WAZE, true)}
+                <ul class="cx-list">${row(ICON.wa, "וואטסאפ", "שלחו לנו הודעה", WA, true)}${row(ICON.phone, "טלפון", '<span dir="ltr">050-7400143</span>', "tel:+972507400143")}${row(ICON.mail, "אימייל", '<span dir="ltr">info@odemdesign.co.il</span>', "mailto:info@odemdesign.co.il")}${row(ICON.pin, "המפעל", "מושב גבעולים, ליד נתיבות", WAZE, true)}
                 </ul>`;
 }
 
@@ -646,7 +649,7 @@ ${ctaStrip("רוצים לראות את המפעל? תתקשרו ונתאם בי�
 page({
   path: "/contact/",
   title: "Contact | odem Kitchens",
-  description: "דברו עם odem Kitchens בוואטסאפ, בטלפון 050-7400143 או דרך הטופס. מפעל נגרות במושב גבעולים, ליד נתיבות.",
+  description: "דברו עם odem Kitchens בוואטסאפ, בטלפון 050-7400143, באימייל info@odemdesign.co.il או דרך הטופס. מפעל נגרות במושב גבעולים, ליד נתיבות.",
   bodyClass: "solid-nav",
   schema: ld({ "@type": "ContactPage", url: SITE + "/contact/", name: "יצירת קשר", about: { "@id": BUSINESS_ID } }),
   body: `
@@ -705,7 +708,7 @@ legalPage("/privacy/", "מדיניות פרטיות",  "איזה מידע נאס
             <p>האתר מופעל על ידי א. סטיילטקס בע"מ, ח.פ. 516475670, הפועלת תחת המותג odem Kitchens (מטבחי אודם) (להלן: "אנחנו"). המדיניות מסבירה איזה מידע אישי אנחנו אוספים דרך האתר, למה, עם מי הוא משותף ומה הזכויות שלכם. היא נכתבה בהתאם לחוק הגנת הפרטיות, התשמ"א-1981, כפי שתוקן (כולל תיקון מס' 13), ולתקנות שלפיו.</p>
 
             <h2>מי אחראי על המידע</h2>
-            <p>האחראית על המידע שנאסף באתר היא א. סטיילטקס בע"מ, מושב גבעולים. לכל שאלה או בקשה בנושא פרטיות: טלפון <a href="tel:0507400143" dir="ltr">050-7400143</a>.</p>
+            <p>האחראית על המידע שנאסף באתר היא א. סטיילטקס בע"מ, מושב גבעולים. לכל שאלה או בקשה בנושא פרטיות: טלפון <a href="tel:0507400143" dir="ltr">050-7400143</a> או אימייל <a href="mailto:info@odemdesign.co.il" dir="ltr">info@odemdesign.co.il</a>.</p>
 
             <h2>איזה מידע נאסף</h2>
             <ul>
@@ -752,7 +755,7 @@ legalPage("/privacy/", "מדיניות פרטיות",  "איזה מידע נאס
 
             <h2>יצירת קשר</h2>
             <p>א. סטיילטקס בע"מ (odem Kitchens), מושב גבעולים.<br>
-            טלפון: <a href="tel:0507400143" dir="ltr">050-7400143</a> · <a href="/contact/">טופס יצירת קשר</a></p>
+            טלפון: <a href="tel:0507400143" dir="ltr">050-7400143</a> · אימייל: <a href="mailto:info@odemdesign.co.il" dir="ltr">info@odemdesign.co.il</a> · <a href="/contact/">טופס יצירת קשר</a></p>
             <p>אנחנו עשויים לעדכן את המדיניות מעת לעת. הנוסח המחייב הוא זה שמופיע באתר.</p>`);
 
 legalPage("/terms/", "תנאי שימוש", "תנאי השימוש באתר מטבחי אודם.", `
@@ -810,7 +813,7 @@ legalPage("/accessibility/", "הצהרת נגישות", "הצהרת הנגישו
             <p>אנחנו ממשיכים לשפר. אם נתקלתם ברכיב שאינו נגיש, נשמח שתספרו לנו.</p>
 
             <h2>רכז הנגישות</h2>
-            <p>טלפון <a href="tel:0507400143" dir="ltr">050-7400143</a>, או דרך <a href="/contact/">טופס יצירת הקשר</a>. נטפל בפנייה תוך זמן סביר.</p>
+            <p>טלפון <a href="tel:0507400143" dir="ltr">050-7400143</a>, אימייל <a href="mailto:info@odemdesign.co.il" dir="ltr">info@odemdesign.co.il</a>, או דרך <a href="/contact/">טופס יצירת הקשר</a>. נטפל בפנייה תוך זמן סביר.</p>
 
             <h2>הסדרי נגישות פיזיים</h2>
             <p>פגישות ייעוץ ומדידות מתקיימות בבית הלקוח. ביקור במפעל במושב גבעולים מתואם מראש בטלפון. אם נדרשת התאמה, ספרו לנו כשאתם מתאמים.</p>`);
@@ -880,6 +883,7 @@ writeFileSync(
 מפעל נגרות במושב גבעולים שבנגב, ליד נתיבות. מתכננים, מייצרים במכונת CNC ומתקינים בכל הארץ: מטבחים בהתאמה אישית, ארונות קיר, חדרי ארונות, ויטרינות, קירות יין וברים, ונגרות למוסדות ולעסקים.
 
 - Phone: +972-50-740-0143
+- Email: info@odemdesign.co.il
 - WhatsApp: https://wa.me/972507400143
 - Founded: 2021. Company: I. Stiltex Ltd (א. סטיילטקס בע"מ)
 - Materials: oak, walnut, laminate (formica), oven-baked paint, marble and quartz countertops

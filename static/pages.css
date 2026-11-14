@@ -294,3 +294,7 @@ footer .brand-mark .bm-sub { color: #8a7a63; }
 .cx-form .form-field input.ltr-field { text-align: right; font-family: 'Inter', 'Heebo', sans-serif; }
 .cx-form .form-field input.ltr-field:focus { text-align: left; }
 .form-notice span[dir="ltr"] { white-space: nowrap; unicode-bidi: isolate; }
+footer .footer-contact { text-align: center; margin: -0.5rem 0 1.5rem; font-size: 0.95rem; font-weight: 300; }
+footer .footer-contact a { color: inherit; text-decoration: none; }
+footer .footer-contact a:hover { color: var(--accent-color); }
+.cx-value span[dir="ltr"] { unicode-bidi: isolate; }
