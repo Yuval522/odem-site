@@ -1,6 +1,7 @@
 // Static site generator for מטבחי אודם. Reuses the original Styletex landing-page markup and style.css.
 import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
+import { POSTS } from "./blog.mjs";
 
 const OUT = "dist";
 const SITE = "https://odemdesign.co.il";
@@ -20,6 +21,7 @@ const NAV = [
   ["/wardrobes/", "WARDROBES"],
   ["/joinery/", "CUSTOM JOINERY"],
   ["/about/", "ABOUT US"],
+  ["/blog/", "BLOG"],
   ["/contact/", "CONTACTS"],
 ];
 
@@ -859,7 +861,79 @@ writeFileSync(
     2
   )
 );
-const urls = ["/", "/kitchens/", "/wardrobes/", "/joinery/", "/about/", "/contact/", "/privacy/", "/terms/", "/accessibility/"];
+// ======================= BLOG =======================
+const heDate = (d) => new Date(d + "T12:00:00Z").toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" });
+const readMin = (html) => Math.max(2, Math.round(html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length / 180));
+const crumbs = (items) => ld({ "@type": "BreadcrumbList", itemListElement: items.map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: SITE + u })) });
+const postCard = (p) => `
+                <a class="post-card" href="/blog/${p.slug}/">
+                    <img src="${p.image}" alt="${esc(p.imageAlt)}" loading="lazy">
+                    <div class="post-card-body">
+                        <span class="post-meta">${heDate(p.date)} · ${readMin(p.body)} דקות קריאה</span>
+                        <h2>${p.title}</h2>
+                        <p>${p.description}</p>
+                        <span class="discover-link">לקריאה</span>
+                    </div>
+                </a>`;
+
+page({
+  path: "/blog/",
+  title: "Blog | odem Kitchens",
+  description: "מאמרים על תכנון מטבחים, ארונות וחדרי ארונות, חומרים ופרזול, מצוות odem Kitchens.",
+  bodyClass: "solid-nav",
+  schema: ld({ "@type": "Blog", "@id": SITE + "/blog/", url: SITE + "/blog/", name: "הבלוג של odem Kitchens", inLanguage: "he-IL", publisher: { "@id": BUSINESS_ID },
+    blogPost: POSTS.map((p) => ({ "@type": "BlogPosting", headline: p.title, url: `${SITE}/blog/${p.slug}/`, datePublished: p.date })) }),
+  body: `
+    <section class="blog-index">
+        <div class="container">
+            <div class="brand-subtitle">BLOG</div>
+            <h1>מה שכדאי לדעת לפני שמתכננים</h1>
+            <p class="blog-intro">טיפים ותשובות לשאלות שאנחנו שומעים בכל פגישת תכנון: חומרים, מידות, פרזול ואיך עובד התהליך.</p>
+            <div class="post-grid">${POSTS.map(postCard).join("")}
+            </div>
+        </div>
+    </section>
+${ctaStrip()}`,
+});
+
+for (const p of POSTS) {
+  const url = `${SITE}/blog/${p.slug}/`;
+  const others = POSTS.filter((o) => o.slug !== p.slug);
+  page({
+    path: `/blog/${p.slug}/`,
+    title: `${p.title} | odem Kitchens`,
+    description: p.description,
+    image: p.image,
+    bodyClass: "solid-nav",
+    schema:
+      ld({ "@type": "BlogPosting", "@id": url, mainEntityOfPage: url, headline: p.title, description: p.description, image: `${SITE}/${p.image}`,
+        datePublished: p.date, dateModified: p.updated || p.date, inLanguage: "he-IL", author: { "@id": BUSINESS_ID }, publisher: { "@id": BUSINESS_ID } }) +
+      crumbs([["דף הבית", "/"], ["בלוג", "/blog/"], [p.title, `/blog/${p.slug}/`]]),
+    body: `
+    <article class="post">
+        <div class="container-minimal">
+            <nav class="post-crumbs" aria-label="פירורי לחם"><a href="/">דף הבית</a> / <a href="/blog/">בלוג</a></nav>
+            <h1>${p.title}</h1>
+            <p class="post-meta">${heDate(p.date)} · ${readMin(p.body)} דקות קריאה</p>
+        </div>
+        <figure class="post-hero"><img src="${p.image}" alt="${esc(p.imageAlt)}"></figure>
+        <div class="container-minimal post-body text-page">
+${p.body}
+            <div class="post-cta">
+                <p>רוצים לדבר על הפרויקט שלכם? שלחו לנו תמונה של החלל בוואטסאפ, ונחזור אליכם.</p>
+                <a href="${WA}" class="post-cta-btn" target="_blank" rel="noopener">לשיחה בוואטסאפ</a>
+            </div>
+        </div>
+        <div class="container post-more">
+            <h2>עוד מהבלוג</h2>
+            <div class="post-grid">${others.map(postCard).join("")}
+            </div>
+        </div>
+    </article>`,
+  });
+}
+
+const urls = ["/", "/kitchens/", "/wardrobes/", "/joinery/", "/about/", "/blog/", ...POSTS.map((p) => `/blog/${p.slug}/`), "/contact/", "/privacy/", "/terms/", "/accessibility/"];
 const LASTMOD = new Date().toISOString().slice(0, 10);
 writeFileSync(
   `${OUT}/sitemap.xml`,
@@ -896,6 +970,8 @@ writeFileSync(
 - [ארונות וחדרי ארונות / Wardrobes and walk-in closets](${SITE}/wardrobes/)
 - [נגרות בהתאמה אישית / Custom joinery, wine walls, institutional](${SITE}/joinery/)
 - [מי אנחנו / About](${SITE}/about/)
+- [בלוג / Blog](${SITE}/blog/)
+${POSTS.map((p) => `  - [${p.title}](${SITE}/blog/${p.slug}/)`).join("\n")}
 - [יצירת קשר / Contact](${SITE}/contact/)
 `
 );
