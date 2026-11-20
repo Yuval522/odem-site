@@ -984,3 +984,26 @@ writeFileSync(
 `
 );
 console.log("built", urls.length, "pages");
+
+// IndexNow: tells Bing (and through it ChatGPT/Copilot search) about updated pages.
+// The key file proves we own the site. Ping runs only on Cloudflare production builds.
+const INDEXNOW_KEY = "df8c7586d40a3cd0fa94da2a41ed8fee";
+writeFileSync(`${OUT}/${INDEXNOW_KEY}.txt`, INDEXNOW_KEY);
+if (process.env.CF_PAGES && process.env.CF_PAGES_BRANCH === "main") {
+  try {
+    const res = await fetch("https://api.indexnow.org/indexnow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        host: new URL(SITE).host,
+        key: INDEXNOW_KEY,
+        keyLocation: `${SITE}/${INDEXNOW_KEY}.txt`,
+        urlList: urls.map((u) => `${SITE}${u}`),
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+    console.log("IndexNow:", res.status);
+  } catch (e) {
+    console.log("IndexNow ping skipped:", e.message);
+  }
+}
